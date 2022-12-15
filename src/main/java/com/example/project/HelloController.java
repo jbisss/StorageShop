@@ -27,7 +27,7 @@ public class HelloController {
     private Good currentGood;
     private Button currentButtonGood;
     public void buttonBuyClick(){
-        fieldGoodCost.setStyle("-fx-text-fill: green;");
+        /*fieldGoodCost.setStyle("-fx-text-fill: green;");
         try {
             ObjectSwamp.myStorage.addGood(currentGood);
             ObjectSwamp.myTerminal.decreaseMoney(currentGood.getOldCost());
@@ -50,7 +50,7 @@ public class HelloController {
         fieldGoodCost.setText("");
         fieldGoodNewCost.setText("");
         currentGood = null;
-        currentButtonGood = null;
+        currentButtonGood = null;*/
     }
     public int i = 0;
     public void timerTick(){
@@ -66,7 +66,7 @@ public class HelloController {
         System.out.println(i);
     }
     public void initialize() {
-        Timer myTimer;
+        /*Timer myTimer;
         myTimer = new Timer();
         myTimer.schedule(new TimerTask() {
             public void run() {
@@ -93,6 +93,6 @@ public class HelloController {
             });
             deliversVBox.getChildren().add(buttonDeliverToAdd);
         }
-        moneyTextField.setText(Integer.toString(ObjectSwamp.myTerminal.getMoney()));
+        moneyTextField.setText(Integer.toString(ObjectSwamp.myTerminal.getMoney()));*/
     }
 }

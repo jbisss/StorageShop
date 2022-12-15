@@ -1,11 +1,15 @@
 package com.example.focus;
 
 public class Good {
+    private final String division;
     private final String name;
+    private final String extraInfo;
     private int oldCost;
     private int newCost;
-    public Good(String name, int cost) {
+    public Good(String division, String name, String extraInfo, int cost) {
+        this.division = division;
         this.name = name;
+        this.extraInfo = extraInfo;
         this.oldCost = cost;
     }
 
