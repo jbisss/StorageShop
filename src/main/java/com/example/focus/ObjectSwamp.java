@@ -1,9 +1,6 @@
 package com.example.focus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class ObjectSwamp {
     public static final ArrayList<String> goodsName = new ArrayList<> (Arrays.asList("Milk", "Cookie", "Bread",
@@ -12,7 +9,7 @@ public class ObjectSwamp {
             "Christofer Nolan", "Mark Twen", "Chris Evans", "Bobby Dylan", "John Snow", "Ilya Muromets",
             "Vasya Perevalov", "Shrek Swampov", "Tony Start", "Gandalf White", "Bilbo Begins"));
     public static HashMap<String, Deliver> delivers = new HashMap<>();
-
+    public static ArrayList<Client> clients = new ArrayList<>();
     public static Terminal myTerminal;
     public static Storage myStorage;
     static {
