@@ -10,6 +10,7 @@ public class Deliver {
     public Deliver(String name){
         this.name = name;
         this.storage = new Storage(true);
+        System.out.println("");
     }
 
     public String getName() {

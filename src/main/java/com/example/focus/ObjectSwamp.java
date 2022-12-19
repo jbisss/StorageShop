@@ -24,4 +24,5 @@ public class ObjectSwamp {
         myTerminal = new Terminal(10000);
         myStorage = new Storage(false);
     }
+    public static void loadClass(){}
 }
