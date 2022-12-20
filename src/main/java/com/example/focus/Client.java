@@ -9,6 +9,7 @@ public class Client {
     private double rating;
     public Client(){
         Random rand = new Random();
+        // Массив возможных имён
         ArrayList<String> names = new ArrayList<>(Arrays.asList("Mark", "Joe", "Jeffry", "Ten", "Sixty", "Robbie",
                 "Bobbie", "Barrie", "Bilbo", "Roy", "Jack"));
         int index = rand.nextInt(names.size());

@@ -1,6 +1,7 @@
 package com.example.focus;
 
 public class Terminal {
+    // Класс терминала
     private int money;
     public final Storage storage;
     public Terminal(int money){
