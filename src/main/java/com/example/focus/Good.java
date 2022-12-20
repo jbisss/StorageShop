@@ -5,7 +5,7 @@ public class Good {
     private final String name;
     private final String extraInfo;
     private int count;
-    private int oldCost;
+    private final int oldCost;
     private int newCost;
     public Good(String division, String name, String extraInfo, int cost, int count) {
         this.division = division;
@@ -29,10 +29,19 @@ public class Good {
         return count;
     }
 
+    public String getExtraInfo() {
+        return extraInfo;
+    }
+
     public void setNewCost(int newCost) {
         this.newCost = newCost;
     }
-    public void setOldCost(int oldCost){
-        this.oldCost = oldCost;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    @Override
+    public String toString(){
+        return this.name + " " + this.count;
     }
 }

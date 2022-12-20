@@ -12,8 +12,12 @@ public class Deliver {
         this.storage = new Storage(true);
         System.out.println("");
     }
-
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
     }
 }

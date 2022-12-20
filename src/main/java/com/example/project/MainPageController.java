@@ -1,19 +1,13 @@
 package com.example.project;
 
-import com.example.focus.Client;
-import com.example.focus.ObjectSwamp;
-import com.example.focus.Storage;
+import com.example.focus.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class MainPageController {
     public VBox deliversVBox;
@@ -43,6 +37,11 @@ public class MainPageController {
     public TextField fieldCountInput;
     public TextField fieldDeliverInfo;
     public Button buttonBuy;
+    public TextField fieldNewCostInput;
+    public TextField ratingTextField;
+    public AnchorPane back;
+    public Pane backUserStorage;
+    public Pane backDeliversStorage;
 
     private void setUpVBox(ArrayList<VBox> listGoods, VBox vBoxBreadUser, VBox vBoxConfectioneryUser, VBox vBoxDairyUser, VBox vBoxMeatUser, VBox vBoxFishUser, VBox vBoxVegetableUser, VBox vBoxFruitUser, VBox vBoxBeverageUser) {
         listGoods.add(vBoxBreadUser);
@@ -55,6 +54,7 @@ public class MainPageController {
         listGoods.add(vBoxBeverageUser);
     }
     public void initialize() {
+
         setUpVBox(deliversGoodsVBox, vBoxBreadDelivery, vBoxConfectioneryDelivery, vBoxDairyDelivery, vBoxMeatDelivery,
                 vBoxFishDelivery, vBoxVegetableDelivery, vBoxFruitDelivery, vBoxBeverageDelivery);
 
@@ -73,6 +73,7 @@ public class MainPageController {
             Button buttonDeliverToAdd = new Button(ObjectSwamp.delivers.get(deliver).getName());
             buttonDeliverToAdd.setPrefWidth(deliversVBox.getPrefWidth());
             buttonDeliverToAdd.setOnAction(actionEvent -> {
+                ObjectSwamp.currentDeliver = ObjectSwamp.delivers.get(deliver);
                 for (VBox vBox : deliversGoodsVBox) {
                     vBox.getChildren().clear();
                 }
@@ -97,10 +98,13 @@ public class MainPageController {
     }
     private void setUpDeliverGoods(int i, int j, String deliver, Storage currentDeliverStorage, String currentDivision) {
         HBox hBoxDeliver = new HBox();
-        Button buttonGoodDeliver = new Button(currentDeliverStorage.goodsByDivision.get(currentDivision).get(j).getName());
+        Button buttonGoodDeliver = new Button(currentDeliverStorage.goodsByDivision.get(currentDivision).get(j).getName()
+                + currentDeliverStorage.goodsByDivision.get(currentDivision).get(j).getExtraInfo());
         Label labelCostDeliver = new Label(Integer.toString(currentDeliverStorage.goodsByDivision.get(currentDivision).get(j).getOldCost()));
         Label labelCountDeliver = new Label(Integer.toString(currentDeliverStorage.goodsByDivision.get(currentDivision).get(j).getCount()));
         buttonGoodDeliver.setOnAction(actionEvent1 -> {
+            ObjectSwamp.currentGood = currentDeliverStorage.goodsByDivision.get(currentDivision).get(j);
+            ObjectSwamp.currentDepartment = currentDivision;
             fieldDeliverInfo.setText(ObjectSwamp.delivers.get(deliver).getName());
             fieldDepartmentInfo.setText(currentDivision);
             fieldProductInfo.setText(buttonGoodDeliver.getText());
@@ -115,8 +119,9 @@ public class MainPageController {
     }
     private void setUpUserGoods(int i, int j, Storage currentUserStorage, String currentDivision){
         HBox hBoxUser = new HBox();
-        Button buttonGoodUser = new Button(currentUserStorage.goodsByDivision.get(currentDivision).get(j).getName());
-        Label labelCostUser = new Label(Integer.toString(currentUserStorage.goodsByDivision.get(currentDivision).get(j).getOldCost()));
+        Button buttonGoodUser = new Button(currentUserStorage.goodsByDivision.get(currentDivision).get(j).getName()
+                + currentUserStorage.goodsByDivision.get(currentDivision).get(j).getExtraInfo());
+        Label labelCostUser = new Label(Integer.toString(currentUserStorage.goodsByDivision.get(currentDivision).get(j).getNewCost()));
         Label labelCountUser = new Label(Integer.toString(currentUserStorage.goodsByDivision.get(currentDivision).get(j).getCount()));
         buttonGoodUser.setOnAction(actionEvent1 -> {
 
@@ -143,19 +148,73 @@ public class MainPageController {
     }
 
     public void buttonBuyClick(){
+        int count = 0;
+        int newCost = 0;
+        try{
+            count = Integer.parseInt(fieldCountInput.getText());
+            newCost = Integer.parseInt(fieldNewCostInput.getText());
+            ArrayList<Good> myGoods = ObjectSwamp.myStorage.goodsByDivision.get(ObjectSwamp.currentDepartment);
+            for (Good myGood : myGoods) {
+                if (myGood.getName().equals(ObjectSwamp.currentGood.getName())) {
+                    if (ObjectSwamp.currentGood.getCount() >= count){
+                        if (ObjectSwamp.myTerminal.getMoney() >= ObjectSwamp.currentGood.getCount()
+                                * ObjectSwamp.currentGood.getOldCost()){
 
+                            ObjectSwamp.myTerminal.decreaseMoney(ObjectSwamp.currentGood.getCount()
+                                    * ObjectSwamp.currentGood.getOldCost());
+                            ObjectSwamp.currentGood.setCount(ObjectSwamp.currentGood.getCount() - count);
+                            myGood.setNewCost(newCost);
+                            myGood.setCount(myGood.getCount() + count);
+                            for (VBox vBox : deliversGoodsVBox) {
+                                vBox.getChildren().clear();
+                            }
+                            for (VBox vBox : usersGoodsVBox) {
+                                vBox.getChildren().clear();
+                            }
+                            for (int i = 0; i < deliversGoodsVBox.size(); i++){
+                                setUpVBox(i, deliversGoodsVBox);
+                                setUpVBox(i, usersGoodsVBox);
+                                for(int j = 0; j < 3; j++){
+                                    String currentDivision = ObjectSwamp.divisionsName.get(i);
+                                    setUpDeliverGoods(i, j, ObjectSwamp.currentDeliver.getName(), ObjectSwamp.currentDeliver.storage, currentDivision);
+                                    setUpUserGoods(i, j, ObjectSwamp.myStorage, currentDivision);
+                                }
+                            }
+                            moneyTextField.setText(Integer.toString(ObjectSwamp.myTerminal.getMoney()));
+                        } else {
+                            loggerTextArea.setText("\nNot enough money!!!");
+                        }
+                    } else {
+                        loggerTextArea.setText("\nToo much!!!");
+                    }
+                    if (ObjectSwamp.currentGood.getCount() == 0){
+                        ObjectSwamp.currentGood.setCount(100);
+                    }
+                }
+            }
+        } catch (Exception exception){
+            loggerTextArea.setText("\nInvalid input!");
+        } finally {
+            fieldDeliverInfo.setText("");
+            fieldDepartmentInfo.setText("");
+            fieldProductInfo.setText("");
+            fieldCostInfo.setText("");
+            fieldCountInput.setText("");
+            fieldNewCostInput.setText("");
+        }
     }
     public int timerTickIndex = 0;
-    public void timerTick(){
+    public void timerTick() {
         timerTickIndex++;
-        if(timerTickIndex % 15 == 0) {
-            Random rand = new Random();
-            int randName = rand.nextInt(ObjectSwamp.goodsName.size());
-            ObjectSwamp.clients.add(new Client(ObjectSwamp.goodsName.get(randName)));
+        if(timerTickIndex % 10 == 0) {
+            loggerTextArea.setText("");
+            Random randClientAmount = new Random();
+            int randAmount = randClientAmount.nextInt(6) + 2;
+            for(int i = 0; i < randAmount; i++){
+                Client client = new Client();
+                loggerTextArea.setText(loggerTextArea.getText() + client.getName() + " " + client.getRating() + "\n");
+            }
+            ratingTextField.setText(String.format("%.3f", ObjectSwamp.rating));
         }
-        if(timerTickIndex % 25 == 0) {
-
-        }
-        System.out.println(timerTickIndex);
     }
 }

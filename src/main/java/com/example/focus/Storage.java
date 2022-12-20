@@ -43,7 +43,7 @@ public class Storage {
             if (division.equals("Meat section")) {
                 ArrayList<Good> goodsMeat = new ArrayList<>();
                 goodsMeat.add(fillGoods(380, 460, "Stuffing", division,  "(1 kg)",loadFactor));
-                goodsMeat.add(fillGoods(330, 380, "Сhicken breast", division,  "(1 kg)",loadFactor));
+                goodsMeat.add(fillGoods(330, 380, "Сhicken", division,  "(1 kg)",loadFactor));
                 goodsMeat.add(fillGoods(320, 360, "Sausage", division,  "(1 kg)",loadFactor));
                 goodsByDivision.put(division, goodsMeat);
             }

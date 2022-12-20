@@ -13,4 +13,7 @@ public class Terminal {
     public void decreaseMoney(int money){
         this.money -= money;
     }
+    public void decreaseMoney(boolean bool, int money){
+        this.money += money;
+    }
 }
